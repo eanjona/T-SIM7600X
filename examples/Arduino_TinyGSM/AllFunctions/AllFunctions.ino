@@ -30,7 +30,7 @@
 #define TINY_GSM_TEST_GPRS          true
 #define TINY_GSM_TEST_TCP           true
 // #define TINY_GSM_TEST_CALL     true
-// #define TINY_GSM_TEST_SMS      true
+#define TINY_GSM_TEST_SMS      true
 // #define TINY_GSM_TEST_USSD     true
 // #define TINY_GSM_TEST_TEMPERATURE   true
 // #define TINY_GSM_TEST_TIME          true
@@ -43,12 +43,12 @@
 #define GSM_PIN             ""
 
 // Set phone numbers, if you want to test SMS and Calls
-// #define SMS_TARGET  "+380xxxxxxxxx"
+#define SMS_TARGET  "+46705526164"
 // #define CALL_TARGET "+380xxxxxxxxx"
 
 // Your GPRS credentials, if any
-const char apn[] = "YourAPN";
-// const char apn[] = "ibasis.iot";
+//const char apn[] = "YourAPN";
+const char apn[] = "online.telia.se";
 const char gprsUser[] = "";
 const char gprsPass[] = "";
 
@@ -326,6 +326,8 @@ void loop()
       DBG("Accuracy:", accuracy2);
       DBG("Year:", year2, "\tMonth:", month2, "\tDay:", day2);
       DBG("Hour:", hour2, "\tMinute:", min2, "\tSecond:", sec2);
+      res = modem.sendSMS(SMS_TARGET, String("Lat: ") + String(lat2, 8) + String(" Long: ") + String(lon2, 8));
+      DBG("SMS sent with position: ", res ? "OK" : "fail");
       break;
     } else {
       light_sleep(2);
