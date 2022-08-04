@@ -52,7 +52,7 @@
 
 // Your GPRS credentials, if any
 // const char apn[]      = "YourAPN";
-const char apn[]      = "cmnet";
+const char apn[]      = "online.telia.se";
 const char gprsUser[] = "";
 const char gprsPass[] = "";
 
@@ -61,11 +61,13 @@ const char wifiSSID[] = "YourSSID";
 const char wifiPass[] = "YourWiFiPass";
 
 // MQTT details
-const char *broker = "broker.hivemq.com";
+const char *broker = "129.192.83.245";
 
 const char *topicLed       = "GsmClientTest/led";
 const char *topicInit      = "GsmClientTest/init";
 const char *topicLedStatus = "GsmClientTest/ledStatus";
+const char *topicPosition = "owntracks/mqttGarage/#";
+
 
 #include <TinyGsmClient.h>
 #include <PubSubClient.h>
@@ -146,6 +148,9 @@ void mqttCallback(char *topic, byte *payload, unsigned int len)
         mqtt.publish(topicLedStatus, ledStatus ? "1" : "0");
 
     }
+    if (String(topic) == topicPosition) {
+      SerialMon.print("Position received:");
+    }
 }
 
 boolean mqttConnect()
@@ -154,10 +159,10 @@ boolean mqttConnect()
     SerialMon.print(broker);
 
     // Connect to MQTT Broker
-    boolean status = mqtt.connect("GsmClientTest");
+    // boolean status = mqtt.connect("GsmClientTest");
 
     // Or, if you want to authenticate MQTT:
-    // boolean status = mqtt.connect("GsmClientName", "mqtt_user", "mqtt_pass");
+    boolean status = mqtt.connect("eanjona_arduino", "mqttGarage", "mqttGarage");
 
     if (status == false) {
         SerialMon.println(" fail");
@@ -166,6 +171,7 @@ boolean mqttConnect()
     SerialMon.println(" success");
     mqtt.publish(topicInit, "GsmClientTest started");
     mqtt.subscribe(topicLed);
+    mqtt.subscribe(topicPosition);
     return mqtt.connected();
 }
 
