@@ -148,8 +148,22 @@ void mqttCallback(char *topic, byte *payload, unsigned int len)
         mqtt.publish(topicLedStatus, ledStatus ? "1" : "0");
 
     }
-    if (String(topic) == topicPosition) {
-      SerialMon.print("Position received:");
+    if (String(topic).indexOf("mqttGarage") > 0) {
+
+      char myNewArray[len+1];
+      for (int i=0;i<len;i++) {
+        Serial.print((char)payload[i]);
+        myNewArray[i] = (char)payload[i];
+      }
+      myNewArray[len] = NULL;
+      
+      int latInString = String(myNewArray).indexOf("lat");
+      int longInString = String(myNewArray).indexOf("lon");
+
+      SerialMon.println();
+      SerialMon.println("Position received!!! : ");
+      SerialMon.println(String(myNewArray).substring(latInString + 5, latInString + 14));
+      SerialMon.println(String(myNewArray).substring(longInString + 5, longInString + 14));
     }
 }
 
