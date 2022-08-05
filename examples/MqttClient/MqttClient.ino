@@ -183,7 +183,7 @@ boolean mqttConnect()
         return false;
     }
     SerialMon.println(" success");
-    mqtt.publish(topicInit, "GsmClientTest started");
+    mqtt.publish(topicInit, "GsmClientTest started from eanjona_arduino");
     mqtt.subscribe(topicLed);
     mqtt.subscribe(topicPosition);
     return mqtt.connected();
